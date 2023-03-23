@@ -120,3 +120,15 @@ function clickEqualButton() {
     operator = undefined;
     displayFirstLine.textContent = firstNumber;
 }
+
+let clearButton = document.querySelector('.clear')
+clearButton.addEventListener('click', clear)
+
+function clear() {
+    firstNumber = '0';
+    secondNumber = '';
+    operator = undefined;
+    isNumberWithComa = false;
+    displayFirstLine.textContent = '';
+    displaySecondLine.textContent = '0';
+}
