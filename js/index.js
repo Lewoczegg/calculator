@@ -1,10 +1,10 @@
-let firstNumber = '';
+let firstNumber = '0';
 let secondNumber = '';
 let operator;
 let isNumberWithComa = false;
 
 const displayFirstLine = document.querySelector('.display-first-line');
-displayFirstLine.textContent = '543534';
+displayFirstLine.textContent = '';
 
 const displaySecondLine = document.querySelector('.display-second-line');
 displaySecondLine.textContent = '0';
@@ -43,10 +43,21 @@ numberButtons.forEach(button => button.addEventListener('click', clickNumberButt
 
 function clickNumberButton() {
     let digit = this.textContent;
-    if(operator === undefined && digit === '0' && firstNumber === '') return;
-    if(operator === undefined) {
+    if(operator === undefined && firstNumber.length >= 18) return;
+    if(operator === undefined && firstNumber === '0') {
+        firstNumber = digit;
+        displaySecondLine.textContent = firstNumber;
+    } else if(operator === undefined) {
         firstNumber += digit;
         displaySecondLine.textContent = firstNumber;
+    } else if (secondNumber === '0' && digit !== '0') {
+        secondNumber = digit;
+    } else if (secondNumber === '0' && digit === '0') {
+        return;
+    }
+    else {
+        secondNumber += digit;
+        displaySecondLine.textContent = secondNumber;
     }
 }
 
@@ -54,13 +65,55 @@ let dotButton = document.querySelector('.btn-dot');
 dotButton.addEventListener('click', clickDotButton);
 
 function clickDotButton() {
-    if(isNumberWithComa === false && operator === undefined && firstNumber === '') {
+    if(isNumberWithComa === true) {
+        console.log('huj');
+        return;
+    }
+    if(operator === undefined && firstNumber === '') {
         firstNumber += '0.';
         displaySecondLine.textContent = firstNumber;
         isNumberWithComa = true;
-    } else if (isNumberWithComa === false && operator === undefined) {
+    } else if (operator === undefined) {
         firstNumber += '.';
         displaySecondLine.textContent = firstNumber;
         isNumberWithComa = true;
+    } else if (secondNumber === '') {
+        secondNumber += '0.'
+        displaySecondLine.textContent = secondNumber;
+        isNumberWithComa = true;
+    } else {
+        secondNumber += '.'
+        displaySecondLine.textContent = secondNumber;
+        isNumberWithComa = true;
     }
+}
+
+let operatorButtons = document.querySelectorAll('.btn-operator');
+operatorButtons.forEach(button => button.addEventListener('click', clickOperatorButton))
+
+function clickOperatorButton() {
+    if(operator === undefined) {
+        operator = this.textContent;
+        displayFirstLine.textContent = firstNumber + ' ' + operator;
+        isNumberWithComa = false;
+    } else if (secondNumber !== '') {
+        equal()
+        operator = this.textContent;
+    }
+}
+
+const equalButton = document.querySelector('.btn-equal');
+equalButton.addEventListener('click', clickEqualButton);
+
+function equal() {
+    firstNumber = operate(parseFloat(firstNumber), operator, parseFloat(secondNumber));
+    secondNumber = ''
+    displayFirstLine.textContent = firstNumber;
+    displaySecondLine.textContent = firstNumber;
+    isNumberWithComa = false;
+}
+
+function clickEqualButton() {
+    equal();
+    operator = undefined;
 }
