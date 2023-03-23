@@ -22,7 +22,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    if(b === 0) return `Can't divide by 0`;
+    if(b === 0) return undefined;
     return a / b;
 }
 
@@ -92,6 +92,7 @@ let operatorButtons = document.querySelectorAll('.btn-operator');
 operatorButtons.forEach(button => button.addEventListener('click', clickOperatorButton))
 
 function clickOperatorButton() {
+    if(operator === '/' && secondNumber === '0') return;
     if(operator === undefined) {
         operator = this.textContent;
         displayFirstLine.textContent = firstNumber + ' ' + operator;
@@ -99,6 +100,7 @@ function clickOperatorButton() {
     } else if (secondNumber !== '') {
         equal()
         operator = this.textContent;
+        displayFirstLine.textContent = firstNumber + ' ' + operator;
     }
 }
 
@@ -108,12 +110,13 @@ equalButton.addEventListener('click', clickEqualButton);
 function equal() {
     firstNumber = operate(parseFloat(firstNumber), operator, parseFloat(secondNumber));
     secondNumber = ''
-    displayFirstLine.textContent = firstNumber;
     displaySecondLine.textContent = firstNumber;
     isNumberWithComa = false;
 }
 
 function clickEqualButton() {
+    if(operator === '/' && secondNumber === '0') return;
     equal();
     operator = undefined;
+    displayFirstLine.textContent = firstNumber;
 }
