@@ -52,6 +52,7 @@ function clickNumberButton() {
         displaySecondLine.textContent = firstNumber;
     } else if (secondNumber === '0' && digit !== '0') {
         secondNumber = digit;
+        displaySecondLine.textContent = secondNumber;
     } else if (secondNumber === '0' && digit === '0') {
         return;
     }
@@ -66,7 +67,6 @@ dotButton.addEventListener('click', clickDotButton);
 
 function clickDotButton() {
     if(isNumberWithComa === true) {
-        console.log('huj');
         return;
     }
     if(operator === undefined && firstNumber === '') {
@@ -115,7 +115,7 @@ function equal() {
 }
 
 function clickEqualButton() {
-    if(operator === '/' && secondNumber === '0') return;
+    if(operator === '/' && secondNumber === '0' || secondNumber === '') return;
     equal();
     operator = undefined;
     displayFirstLine.textContent = firstNumber;
@@ -131,4 +131,25 @@ function clear() {
     isNumberWithComa = false;
     displayFirstLine.textContent = '';
     displaySecondLine.textContent = '0';
+}
+
+let deleteButton = document.querySelector('.delete')
+deleteButton.addEventListener('click', deleteFromSecondLine);
+
+function deleteFromSecondLine() {
+    let deletedChar;
+    if(operator === undefined) {
+        deletedChar = firstNumber.toString().charAt(firstNumber.length - 1);
+        firstNumber = firstNumber.toString().slice(0, -1);
+        displaySecondLine.textContent = firstNumber;
+    }
+    else {
+        deletedChar = secondNumber.toString().charAt(secondNumber.length - 1);
+        secondNumber = secondNumber.toString().slice(0, -1);
+        displaySecondLine.textContent = secondNumber;
+    }
+    if(deletedChar === '.') {
+        isNumberWithComa = false;
+    }
+    
 }
