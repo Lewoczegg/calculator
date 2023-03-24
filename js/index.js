@@ -3,6 +3,8 @@ let secondNumber = '';
 let operator;
 let isNumberWithComa = false;
 
+document.addEventListener('keydown', handleKeyboardInput);
+
 const displayFirstLine = document.querySelector('.display-first-line');
 displayFirstLine.textContent = '';
 
@@ -41,8 +43,8 @@ function operate(firstNumber, operator, secondNumber) {
 let numberButtons = document.querySelectorAll('.btn-number');
 numberButtons.forEach(button => button.addEventListener('click', clickNumberButton));
 
-function clickNumberButton() {
-    let digit = this.textContent;
+function clickNumberButton(key) {
+    let digit = this.textContent || key;
     if(operator === undefined && firstNumber.length >= 18) return;
     if(operator === undefined && firstNumber === '0') {
         firstNumber = digit;
@@ -91,15 +93,15 @@ function clickDotButton() {
 let operatorButtons = document.querySelectorAll('.btn-operator');
 operatorButtons.forEach(button => button.addEventListener('click', clickOperatorButton))
 
-function clickOperatorButton() {
+function clickOperatorButton(op) {
     if(operator === '/' && secondNumber === '0') return;
     if(operator === undefined) {
-        operator = this.textContent;
+        operator = this.textContent || op;
         displayFirstLine.textContent = firstNumber + ' ' + operator;
         isNumberWithComa = false;
     } else if (secondNumber !== '') {
         equal()
-        operator = this.textContent;
+        operator = this.textContent || op;
         displayFirstLine.textContent = firstNumber + ' ' + operator;
     }
 }
@@ -151,5 +153,18 @@ function deleteFromSecondLine() {
     if(deletedChar === '.') {
         isNumberWithComa = false;
     }
-    
+}
+
+function handleKeyboardInput(e) {
+    if(e.key === 'Backspace' || e.key === 'Delete') {
+        deleteFromSecondLine()
+    } else if(e.key === '-' || e.key === '+' || e.key === '*' || e.key === '/') {
+        clickOperatorButton(e.key);
+    } else if (e.key === '=') {
+        clickEqualButton();
+    } else if (e.key === '.') {
+        clickDotButton();
+    } else if(e.key >= 0 && e.key <=9) {
+        clickNumberButton(e.key)
+    }
 }
